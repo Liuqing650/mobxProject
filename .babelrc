@@ -3,6 +3,10 @@
     "react",
     "es2015"
   ],
+  "plugins": [
+    "transform-runtime",
+    "transform-decorators-legacy"
+  ],
   "env": {
     "development": {
       "plugins": [

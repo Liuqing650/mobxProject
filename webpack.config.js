@@ -1,5 +1,6 @@
 var HtmlwebpackPlugin = require('html-webpack-plugin');
 var webpack = require("webpack");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 //__dirname是node.js中的一个全局变量，它指向当前执行脚本所在的目录
 module.exports = {//注意这里是exports不是export
     devtool: 'eval-source-map',//生成Source Maps,这里选择eval-source-map
@@ -19,10 +20,7 @@ module.exports = {//注意这里是exports不是export
 
     module: {
     	loaders: [
-    		{
-            	test:/\.css$/,
-            	loader:"style-loader!css-loader"
-            }, {
+            {
                 test: /\.(js|jsx)$/,//一个匹配loaders所处理的文件的拓展名的正则表达式，这里用来匹配js和jsx文件（必须）
                 exclude: /node_modules/,//屏蔽不需要处理的文件（文件夹）（可选）
                 loader: 'babel-loader',//loader的名称（必须）
@@ -32,8 +30,14 @@ module.exports = {//注意这里是exports不是export
                         ["import",{"libraryName":"antd","style":"css"}]
                     ]
                 }
+            }, {
+            	test:/\.css$/,
+            	loader:"style-loader!css-loader"
+            }, {
+                test: /\.less$/,
+                use: ['style-loader', 'css-loader', 'less-loader']
             }
-        ]
+        ],
     },
 
     //webpack-dev-server配置
