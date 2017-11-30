@@ -7,12 +7,13 @@ module.exports = {//注意这里是exports不是export
     entry: __dirname + "/src/index.js",//唯一入口文件，就像Java中的main方法
     output: {//输出目录
         path: __dirname + "/dist",//打包后的js文件存放的地方
-        filename: "index.js"//打包后的js文件名
+        filename: "[name].js"//打包后的js文件名,
     },
 
     plugins: [
     	new webpack.BannerPlugin('版权所有，翻版必究'),
-    	new webpack.HotModuleReplacementPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new ExtractTextPlugin("[name].css", {allChunks: true}),
 	    new HtmlwebpackPlugin({
 	       template: __dirname + "/src/index.html"//html模版地址
 	     })
@@ -32,14 +33,13 @@ module.exports = {//注意这里是exports不是export
                 }
             }, {
             	test:/\.css$/,
-            	loader:"style-loader!css-loader"
+            	loader: ExtractTextPlugin.extract('css-loader')
             }, {
                 test: /\.less$/,
-                use: ['style-loader', 'css-loader', 'less-loader']
+            	loader: ExtractTextPlugin.extract(['css-loader','less-loader'])
             }
         ],
     },
-
     //webpack-dev-server配置
     devServer: {
         contentBase: "./src",//默认webpack-dev-server会为根文件夹提供本地服务器，如果想为另外一个目录下的文件提供本地服务器，应该在这里设置其所在目录（本例设置到"build"目录）
