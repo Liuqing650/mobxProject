@@ -26,3 +26,52 @@
         ```
     - 将打包后的js文件也以文件名打包
       - filename: "[name].js" 生成一个main.js文件, 比较大
+  3. 更新摘要 （2017-12-12）
+    - 修改pacage.json中的启动项
+      - "start": "webpack-dev-server --open"
+      - 新增 --open 即可在启动完成之后自动在默认浏览器打开项目
+    - 新增图像支持
+      - 新增文件 webpack-isomorphic-tools.js
+      - 安装 webpack-isomorphic-tools
+      - 在webpack.config.js中使用
+        ```
+          var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+          var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
+            ...
+          module.exports = {
+            ...
+              module: {
+                loaders: [
+                  { test: webpackIsomorphicToolsPlugin.regular_expression('images'), loader: 'url-loader?limit=10240' },
+                  ...
+                ]
+              }
+            ...
+          }
+        ```
+    - 引入CSS Modules
+      - 具体（https://segmentfault.com/a/1190000004530909）
+      - 将css打包到css文件夹下
+      ```
+        new ExtractTextPlugin({ 
+            filename: (getPath) => {
+                return getPath('css/[name].css').replace('css/js', 'css');
+            },
+            allChunks: true
+        })
+      ```
+    - 引入可视化资源分析工具webpack-visualizer
+      - npm install webpack-visualizer-plugin --save-dev
+      - 在webpack.config.js中使用
+        ```
+          var Visualizer = require('webpack-visualizer-plugin');
+            ...
+            module.exports = {
+              ...
+              plugins: [
+                new Visualizer(),
+                ...
+              ]
+            }
+        ```
+      - 编译 npm run build 将多出一个stats.html文件
